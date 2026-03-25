@@ -2041,7 +2041,7 @@
       const dateHe = `${String(d).padStart(2, '0')}/${String(m).padStart(2, '0')}/${y}`;
       const totalPrice = items.reduce((s, [id, q]) => s + getProductTotal(id, q), 0);
 
-      let msg = `*   ליאל אדרי|Homemade Baking* 🍰\n\n`;
+      let msg = `*ליאל אדרי | Homemade Baking* 🍰\n\n`;
       msg += `📦 *פריטים:*\n`;
       items.forEach(([id, qty]) => {
         const p = products.find(pr => pr.id == id);
