@@ -191,6 +191,52 @@
       transform: scale(1);
     }
 
+    /* ─── CATEGORIES MENU ───────────────────────────────────────────────────── */
+    .categories-menu {
+      position: fixed;
+      top: 64px;
+      right: 0;
+      left: 0;
+      z-index: 99;
+      background: var(--white);
+      border-bottom: 1px solid var(--sand);
+      padding: 0 20px;
+    }
+
+    .categories-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      height: 50px;
+      gap: 0;
+    }
+
+    .category-link {
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 24px;
+      font-size: .95rem;
+      font-weight: 500;
+      color: var(--black);
+      text-decoration: none;
+      position: relative;
+      transition: var(--transition);
+      border-bottom: 2.5px solid transparent;
+    }
+
+    .category-link:hover {
+      color: var(--accent2);
+      border-bottom-color: var(--accent2);
+    }
+
+    .category-link.active {
+      color: var(--accent2);
+      border-bottom-color: var(--accent2);
+    }
+
     /* ─── HERO ──────────────────────────────────────────────────────────────── */
     #hero {
       min-height: 100svh;
@@ -202,6 +248,7 @@
       padding: 100px 20px 60px;
       position: relative;
       overflow: hidden;
+      margin-top: 50px;
     }
 
     #hero::before {
@@ -1041,6 +1088,18 @@
 
     /* ─── Responsive ────────────────────────────────────────────────────────── */
     @media (max-width: 600px) {
+      .categories-inner {
+        overflow-x: auto;
+        justify-content: flex-start;
+      }
+
+      .category-link {
+        padding: 0 16px;
+        font-size: .88rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
       .order-card {
         padding: 26px 22px;
       }
@@ -1234,6 +1293,15 @@
           <span id="cart-count">0</span>
         </button>
       </div>
+    </div>
+  </nav>
+
+  <!-- ──────────────────── CATEGORIES MENU ─────────────────────────────────── -->
+  <nav class="categories-menu">
+    <div class="categories-inner">
+      <a href="#products" class="category-link">המוצרים שלי</a>
+      <a href="#order" class="category-link">פרטי הזמנה</a>
+      <a href="#packages" class="category-link">מארזים בעיצוב אישי</a>
     </div>
   </nav>
 
@@ -2058,6 +2126,50 @@
         }
       });
     })();
+
+    /* ───── ACTIVE MENU TRACKING ───── */
+    function updateActiveMenu() {
+      const sections = [
+        { id: 'products', link: 'a[href="#products"]' },
+        { id: 'order', link: 'a[href="#order"]' },
+        { id: 'packages', link: 'a[href="#packages"]' }
+      ];
+      
+      let activeSection = null;
+      let maxRatio = 0;
+      
+      sections.forEach(sec => {
+        const el = document.getElementById(sec.id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const viewportHeight = window.innerHeight;
+          const isVisible = rect.top < viewportHeight && rect.bottom > 0;
+          
+          if (isVisible) {
+            const ratio = Math.min(1, (viewportHeight - rect.top) / (rect.height + viewportHeight));
+            if (ratio > maxRatio) {
+              maxRatio = ratio;
+              activeSection = sec.link;
+            }
+          }
+        }
+      });
+      
+      // Update menu links
+      document.querySelectorAll('.category-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      if (activeSection) {
+        const activeLink = document.querySelector(activeSection);
+        if (activeLink) {
+          activeLink.classList.add('active');
+        }
+      }
+    }
+
+    window.addEventListener('scroll', updateActiveMenu, { passive: true });
+    window.addEventListener('load', updateActiveMenu);
 
     /* ───── INIT ───── */
     renderProducts();
