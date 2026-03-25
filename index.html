@@ -1518,6 +1518,11 @@
           <div class="mix-opt-desc">3 מכל אחד מ-4 הטעמים (12 סה"כ)</div>
         </label>
         <label class="mix-opt">
+          <input type="radio" name="mix-type" value="12x1" />
+          <div class="mix-opt-title"> 12x1 – טעם אחד</div>
+          <div class="mix-opt-desc">12 יחידות מאותו טעם</div>
+        </label>
+        <label class="mix-opt">
           <input type="radio" name="mix-type" value="66" />
           <div class="mix-opt-title"> 6+6 – שני טעמים</div>
           <div class="mix-opt-desc">בחרו 2 טעמים, 6 מכל אחד</div>
@@ -1607,7 +1612,7 @@
       {
         id: 1,
         name: "מגולגלות ליאל",
-        desc: "מגולגלות עשירות במגוון טעמים",
+        desc: "מגולגלות עשירות במגוון טעמים : נוטלה דובאי, קקאו קינדר, נוטלה קינדר וקורנפלקס שוקולד לבן",
         price: 65,
         unit: "12 יחידות",
         img: "ITEM1(2).jpeg"
@@ -1776,11 +1781,13 @@
     function updateFlavorPickers() {
       const mix = document.querySelector('input[name="mix-type"]:checked').value;
       const pickers = document.getElementById('flavor-pickers');
+      const row2 = document.getElementById('frow-2');
       const row3 = document.getElementById('frow-3');
       if (mix === 'mix3') {
         pickers.classList.remove('visible');
       } else {
         pickers.classList.add('visible');
+        row2.style.display = mix === '12x1' ? 'none' : 'flex';
         row3.style.display = mix === '444' ? 'flex' : 'none';
       }
     }
@@ -1796,6 +1803,10 @@
 
       if (mix === 'mix3') {
         flavorDesc = 'מיקס מלא – 3 מכל טעם (נוטלה דובאי, קקאו קינדר, נוטלה קינדר, קורנפלקס שוקולד לבן)';
+      } else if (mix === '12x1') {
+        const f1 = document.getElementById('fl1').value;
+        if (!f1) { showToast('נא לבחור טעם אחד'); return; }
+        flavorDesc = `12x1 – ${f1} (12)`;
       } else if (mix === '66') {
         const f1 = document.getElementById('fl1').value;
         const f2 = document.getElementById('fl2').value;
